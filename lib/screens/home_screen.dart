@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cubit_2/screens/category_screen.dart';
 import 'package:news_cubit_2/screens/search_screen.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+import '../cubits/news_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
     const SearchScreen(),
     const CategoryScreen(category: "Health"),
     const CategoryScreen(category: "Entertainment"),
-
   ];
   @override
   Widget build(BuildContext context) {
@@ -35,20 +38,42 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(titles[currentIndex]),
       ),
       body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+      bottomNavigationBar: SalomonBottomBar(
         onTap: (index) {
+          context.read<NewsCubit>().getArticles(category: titles[index].toLowerCase());
           setState(() {
             currentIndex = index;
           });
         },
-        currentIndex: currentIndex, items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.business_rounded), label: "Business"),
-          BottomNavigationBarItem(icon: Icon(Icons.search_rounded), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.health_and_safety_outlined), label: "Health"),
-          BottomNavigationBarItem(icon: Icon(Icons.movie_creation_outlined), label: "Entertainment"),
-      ],
-    ),);
+        currentIndex: currentIndex,
+        items: [
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.home),
+            title: const Text("Home"),
+            selectedColor: Colors.deepPurple,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.business_rounded),
+            title: const Text("Business"),
+            selectedColor: Colors.blue,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.search_rounded),
+            title: const Text("Search"),
+            selectedColor: Colors.orange,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.health_and_safety_outlined),
+            title: const Text("Health"),
+            selectedColor: Colors.green,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.movie_creation_outlined),
+            title: const Text("Media"),
+            selectedColor: Colors.pink,
+          ),
+        ],
+      ),
+    );
   }
 }

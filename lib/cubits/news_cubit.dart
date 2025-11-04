@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:news_cubit_2/models/news_model.dart';
 
 import '../services/news_service.dart';

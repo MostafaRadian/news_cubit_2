@@ -27,13 +27,13 @@ class NewsModel {
     final List<dynamic> tempList = json['articles'];
     final List<Article> articlesList = tempList.map((article) {
       return Article(
-        source: article['source']['name'],
-        author: article['author'],
-        title: article['title'],
-        description: article['description'],
-        url: article['url'],
-        urlToImage: article['urlToImage'],
-        publishedAt: article['publishedAt'],
+        source: article['source']['name'] ?? '',
+        author: article['author'] ?? '',
+        title: article['title'] ?? '',
+        description: article['description'] ?? '',
+        url: article['url'] ?? '',
+        urlToImage: article['urlToImage'] ?? '' ,
+        publishedAt: article['publishedAt'] ?? '',
       );
     }).toList();
     return NewsModel(articles: articlesList);
