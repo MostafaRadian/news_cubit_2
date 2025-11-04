@@ -24,8 +24,8 @@ class NewsModel {
   NewsModel({required this.articles});
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> articleList = json['articles'];
-    final List<Article> articles = articleList.map((article) {
+    final List<dynamic> tempList = json['articles'];
+    final List<Article> articlesList = tempList.map((article) {
       return Article(
         source: article['source']['name'],
         author: article['author'],
@@ -36,6 +36,6 @@ class NewsModel {
         publishedAt: article['publishedAt'],
       );
     }).toList();
-    return NewsModel(articles: articles);
+    return NewsModel(articles: articlesList);
   }
 }
