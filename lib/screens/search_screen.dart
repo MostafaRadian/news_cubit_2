@@ -21,6 +21,44 @@ class SearchScreen extends StatelessWidget {
         onPressed: () {}
     ),
 
+            builder: (context, state) {
+              if (state is NewsLoading) {
+                return const LinearProgressIndicator();
+              }
+              if (state is NewsLoaded) {
+                List<Article> articles = state.model.articles;
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: articles.length,
+                    itemBuilder: (context, index) {
+                      final article = articles[index];
+                      return ListTile(
+                        title: Text(article.title),
+                        onTap: () {
+
+                        },
+                      );
+                    },
+                  ),
+                );
+              } else {
+                return const Center();
+              }
+            },
+          ),
+        ],
       ),
 
 
