@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cubit_2/widgets/article_item.dart';
@@ -6,8 +8,21 @@ import '../cubits/news_cubit.dart';
 import '../cubits/news_state.dart';
 import '../models/news_model.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +34,15 @@ class SearchScreen extends StatelessWidget {
             leading: Icon(Icons.search),
             hintText: 'Search',
             onChanged: (value) {
-              if (value.isNotEmpty) {
-                context.read<NewsCubit>().searchArticles(query: value);
-              }
+              _debounce?.cancel();
+
+              final query = value.trim();
+              if (query.isEmpty) return;
+
+              _debounce = Timer(const Duration(milliseconds: 400), () {
+                if (!mounted) return;
+                context.read<NewsCubit>().searchArticles(query: query);
+              });
             },
           ),
           Expanded(
