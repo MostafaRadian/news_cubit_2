@@ -17,6 +17,8 @@ final class NewsError extends NewsState{
 }
 
 
+final class SearchInitial extends NewsState {}
+
 final class SearchLoading extends NewsState {}
 
 final class SearchLoaded extends NewsState{

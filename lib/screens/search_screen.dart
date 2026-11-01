@@ -37,7 +37,13 @@ class _SearchScreenState extends State<SearchScreen> {
               _debounce?.cancel();
 
               final query = value.trim();
-              if (query.isEmpty) return;
+              if (query.isEmpty) {
+                context.read<NewsCubit>().clearSearch();
+                return;
+              }
+
+              // Ignore any older request while this query is being debounced.
+              context.read<NewsCubit>().invalidateSearch();
 
               _debounce = Timer(const Duration(milliseconds: 400), () {
                 if (!mounted) return;
