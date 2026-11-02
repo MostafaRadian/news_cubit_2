@@ -9,6 +9,7 @@ class NewsCubit extends Cubit<NewsState> {
   NewsCubit() : super(NewsInitial());
 
   int _latestSearchNumber = 0;
+  final Map<String, NewsModel> _categoryCache = {};
 
   void invalidateSearch() {
     _latestSearchNumber++;
@@ -20,10 +21,23 @@ class NewsCubit extends Cubit<NewsState> {
   }
 
   Future<void> getArticles({required String category}) async {
+    final normalizedCategory = category.toLowerCase();
+
+    final cachedModel = _categoryCache[normalizedCategory];
+    if (cachedModel != null) {
+      emit(NewsLoaded(model: cachedModel));
+      return;
+    }
+
     emit(NewsLoading());
+
     try {
-      NewsModel tempModel = await NewsService.getNews(category: category);
-      emit(NewsLoaded(model: tempModel));
+      final model = await NewsService.getNews(
+        category: normalizedCategory,
+      );
+
+      _categoryCache[normalizedCategory] = model;
+      emit(NewsLoaded(model: model));
     } catch (error) {
       emit(NewsError(message: error.toString()));
     }
