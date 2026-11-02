@@ -29,11 +29,20 @@ class CategoryScreen extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         } else if (state is NewsLoaded) {
           List<Article> articles = state.model.articles;
-          return ListView.builder(
-            itemCount: articles.length,
-            itemBuilder: (context, index) {
-              return ArticleItem(article: articles[index]);
+          return RefreshIndicator(
+            onRefresh: () {
+              return context.read<NewsCubit>().getArticles(
+                category: category,
+                forceRefresh: true,
+              );
             },
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                return ArticleItem(article: articles[index]);
+              },
+            ),
           );
         } else {
           return SizedBox();

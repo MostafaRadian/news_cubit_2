@@ -10,6 +10,7 @@ class NewsCubit extends Cubit<NewsState> {
 
   int _latestSearchNumber = 0;
   final Map<String, NewsModel> _categoryCache = {};
+  final Map<String, DateTime> _categoryCacheTimes = {};
 
   void invalidateSearch() {
     _latestSearchNumber++;
@@ -20,16 +21,31 @@ class NewsCubit extends Cubit<NewsState> {
     emit(SearchInitial());
   }
 
-  Future<void> getArticles({required String category}) async {
+  Future<void> getArticles({
+    required String category,
+    bool forceRefresh = false,
+  }) async {
     final normalizedCategory = category.toLowerCase();
 
     final cachedModel = _categoryCache[normalizedCategory];
-    if (cachedModel != null) {
+    final cachedAt = _categoryCacheTimes[normalizedCategory];
+
+    final cacheIsFresh =
+        cachedModel != null &&
+            cachedAt != null &&
+            DateTime.now().difference(cachedAt) < const Duration(minutes: 10);
+
+    // Use fresh cached articles unless the user explicitly requested a refresh.
+    if (cacheIsFresh && !forceRefresh) {
       emit(NewsLoaded(model: cachedModel));
       return;
     }
 
-    emit(NewsLoading());
+    // Keep the current list visible during pull-to-refresh if we have cached data.
+    // Show the normal loading screen for a first fetch or an expired-cache fetch.
+    if (!forceRefresh || cachedModel == null) {
+      emit(NewsLoading());
+    }
 
     try {
       final model = await NewsService.getNews(
@@ -37,9 +53,17 @@ class NewsCubit extends Cubit<NewsState> {
       );
 
       _categoryCache[normalizedCategory] = model;
+      _categoryCacheTimes[normalizedCategory] = DateTime.now();
+
       emit(NewsLoaded(model: model));
     } catch (error) {
       emit(NewsError(message: error.toString()));
+
+      // If refreshing failed, restore the cached articles instead of leaving
+      // the category screen empty.
+      if (cachedModel != null) {
+        emit(NewsLoaded(model: cachedModel));
+      }
     }
   }
 
