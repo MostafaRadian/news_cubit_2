@@ -16,6 +16,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
+  final List<String?> categories = [
+    'general',
+    'business',
+    null, // Search tab
+    'health',
+    'entertainment',
+  ];
+
   List<String> titles = [
     "Home",
     "Business",
@@ -41,7 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body: pages[currentIndex],
       bottomNavigationBar: SalomonBottomBar(
         onTap: (index) {
-          context.read<NewsCubit>().getArticles(category: titles[index].toLowerCase());
+          if (index == currentIndex) return;
+
+          final category = categories[index];
+
+          if (category != null) {
+            context.read<NewsCubit>().getArticles(category: category);
+          }
           setState(() {
             currentIndex = index;
           });
