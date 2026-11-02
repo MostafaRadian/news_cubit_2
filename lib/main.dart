@@ -15,11 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-
-      create: (BuildContext context) => NewsCubit()..getArticles(category: "general"),
+      create: (context) => NewsCubit()..getArticles(category: 'general'),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Daily Brief',
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -36,10 +35,43 @@ class MyApp extends StatelessWidget {
           //
           // This works for code too, not just values: Most code changes can be
           // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+          colorScheme:
+              ColorScheme.fromSeed(
+                seedColor: const Color(0xFFB6A1FF),
+                brightness: Brightness.dark,
+              ).copyWith(
+                primary: const Color(0xFFB6A1FF),
+                onPrimary: const Color(0xFF17151F),
+                surface: const Color(0xFF191A1F),
+                onSurface: const Color(0xFFF0EFF4),
+                outline: const Color(0xFF303138),
+              ),
+          scaffoldBackgroundColor: const Color(0xFF101114),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xFF101114),
+            foregroundColor: Color(0xFFF0EFF4),
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: false,
+            toolbarHeight: 58,
+            titleTextStyle: TextStyle(
+              color: Color(0xFFF0EFF4),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.1,
+            ),
+          ),
+          dividerTheme: const DividerThemeData(
+            color: Color(0xFF292A30),
+            thickness: 1,
+            space: 1,
+          ),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Color(0xFFB6A1FF),
+          ),
         ),
-        home: HomeScreen(),
-
+        home: const HomeScreen(),
       ),
     );
   }

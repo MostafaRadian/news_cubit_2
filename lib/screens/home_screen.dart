@@ -24,14 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'entertainment',
   ];
 
-  List<String> titles = [
-    "Home",
-    "Business",
-    "Search",
-    "Health",
-    "Entertainment",
-  ];
-  List<Widget> pages = [
+  final List<Widget> pages = [
     const CategoryScreen(category: "General"),
     const CategoryScreen(category: "Business"),
     const SearchScreen(),
@@ -41,13 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 3,
-        title: Text(titles[currentIndex]),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Daily Brief')),
       body: pages[currentIndex],
       bottomNavigationBar: SalomonBottomBar(
+        backgroundColor: const Color(0xFF191A1F),
+        selectedItemColor: const Color(0xFFB6A1FF),
+        unselectedItemColor: const Color(0xFF858791),
+        selectedColorOpacity: 0.14,
+        itemShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        margin: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+        itemPadding: const EdgeInsets.symmetric(horizontal: 11, vertical: 10),
         onTap: (index) {
           if (index == currentIndex) return;
 
@@ -65,27 +63,27 @@ class _HomeScreenState extends State<HomeScreen> {
           SalomonBottomBarItem(
             icon: const Icon(Icons.home),
             title: const Text("Home"),
-            selectedColor: Colors.deepPurple,
+            selectedColor: const Color(0xFFB6A1FF),
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.business_rounded),
             title: const Text("Business"),
-            selectedColor: Colors.blue,
+            selectedColor: const Color(0xFF61C9E8),
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.search_rounded),
             title: const Text("Search"),
-            selectedColor: Colors.orange,
+            selectedColor: const Color(0xFFFFB454),
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.health_and_safety_outlined),
             title: const Text("Health"),
-            selectedColor: Colors.green,
+            selectedColor: const Color(0xFF4FD1A5),
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.movie_creation_outlined),
-            title: const Text("Media"),
-            selectedColor: Colors.pink,
+            title: const Text("Entertainment"),
+            selectedColor: const Color(0xFFFF6F9F),
           ),
         ],
       ),
