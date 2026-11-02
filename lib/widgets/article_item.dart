@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/news_model.dart';
 
 class ArticleItem extends StatelessWidget {
@@ -19,12 +19,24 @@ class ArticleItem extends StatelessWidget {
         contentPadding: const EdgeInsets.all(8),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            article.urlToImage,
+          child: CachedNetworkImage(
+            imageUrl: article.urlToImage,
             width: 90,
             height: 90,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
+            placeholder: (context, url) => Container(
+              width: 90,
+              height: 90,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFFE8E8E8), Color(0xFFF5F5F5)],
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            errorWidget: (context, url, error) => Container(
               width: 90,
               height: 90,
               color: Colors.grey.shade200,

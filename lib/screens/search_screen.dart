@@ -101,7 +101,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      shrinkWrap: true,
                       itemCount: articles.length,
                       itemBuilder: (context, index) {
                         final article = articles[index];
